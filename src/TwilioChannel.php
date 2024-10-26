@@ -46,7 +46,6 @@ class TwilioChannel
         try {
             $to = $this->getTo($notifiable, $notification);
 
-            // Suppress notification if notifier address is found to be NULL
             if($to === null) return;
             
             $message = $notification->toTwilio($notifiable);
@@ -93,7 +92,7 @@ class TwilioChannel
         if ($notifiable->routeNotificationFor(self::class, $notification)) {
             return $notifiable->routeNotificationFor(self::class, $notification);
         }
-        if ($notifiable->routeNotificationFor('twilio', $notification)) {
+        if (method_exists($notifiable, 'routeNotificationForTwilio')) {
             return $notifiable->routeNotificationFor('twilio', $notification);
         }
         if (isset($notifiable->phone_number)) {
